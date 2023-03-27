@@ -31,6 +31,9 @@ jobs:
   second: 
     runs-on: ubuntu-latest
     needs: first
+    permissions:
+      pull-requests: write
+    if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Download file
         uses: actions/download-artifact@master
@@ -38,5 +41,18 @@ jobs:
           path: datadir
       - name: Format
         run: |
-          find .
-        
+          echo '## :fire: End To End Tests Report :fire:' > comment.txt
+          cd datadir/artifact/
+          declare -a artifacts=(*)
+          for artifact in "${artifacts[@]}"; do
+            declare suite=$(cat ${artifact} | cut -d ' ' -f1)
+            declare link=$(cat ${artifact} | cut -d ' ' -f2)
+            echo "* [${suite}](${link})" >> ${{ github.workspace }}/comment.txt
+          done
+      - name: Add test report comment
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          filePath: comment.txt
+          reactions: eyes
+          mode: recreate
+          comment_tag: test_report
