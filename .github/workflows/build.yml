@@ -24,7 +24,7 @@ jobs:
         run: |
           mkdir datadir
           cd datadir
-          echo "${{ matrix.platform }}" > ${{ matrix.platform }}.txt
+          echo "${{ matrix.platform }} https://${{ matrix.platform }}.com" > ${{ matrix.platform }}.txt
       - uses: actions/upload-artifact@v3
         with:
           path: datadir/${{ matrix.platform }}.txt
@@ -36,3 +36,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           path: datadir
+      - name: Format
+        run: |
+          find .
+        
