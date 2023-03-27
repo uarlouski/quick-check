@@ -1,0 +1,38 @@
+name: Build
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  first:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ qwe, rty, uio ]
+    steps:
+      - name: Checkout (including submodules)
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Create file
+        run: |
+          mkdir datadir
+          cd datadir
+          echo "${{ matrix.platform }}" > ${{ matrix.platform }}.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          path: datadir/${{ matrix.platform }}.txt
+  second: 
+    runs-on: ubuntu-latest
+    needs: first
+    steps:
+      - name: Download file
+        uses: actions/download-artifact@master
+        with:
+          path: datadir
