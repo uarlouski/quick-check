@@ -9,9 +9,14 @@ jobs:
     permissions:
       pull-requests: write
     runs-on: ubuntu-20.04
+    if: ${{ github.event.label.name == 'ready-to-test' }}
     steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Echo
-        run: echo Hello
+        env:
+          SECRET: ${{ secrets.SECRET }}
+        run: |
+          echo "I am ready to test"
+          echo "${SECRET}"
