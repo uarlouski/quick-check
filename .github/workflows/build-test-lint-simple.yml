@@ -20,3 +20,4 @@ jobs:
         run: |
           echo "I am ready to test"
           echo "${SECRET}"
+          echo "Stop printing secrets"
