@@ -9,6 +9,8 @@ on:
 jobs:
   on-label:
     permissions:
+      actions: read
+      checks: write
       pull-requests: write
     uses: ./.github/workflows/build-test-lint-simple.yml
     secrets: inherit
