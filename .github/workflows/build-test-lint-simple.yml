@@ -7,6 +7,8 @@ jobs:
   setup:
     name: Setup, Build, Lint and Test
     permissions:
+      actions: read
+      checks: write
       pull-requests: write
     runs-on: ubuntu-20.04
     if: ${{ github.event.label.name == 'ready-to-test' }}
